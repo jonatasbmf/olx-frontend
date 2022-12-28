@@ -2,10 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { HeaderArea } from './styled';
 
-import { isLogged } from '../../../helpers/authHandler';
+import { isLogged, doLogout } from '../../../helpers/authHandler';
 
 const Header = () => {
     let logged = isLogged();
+
+    const handleLogout = () => {
+        doLogout();
+        window.location.href = "/";
+    }
 
     return (
         <HeaderArea>
@@ -25,7 +30,7 @@ const Header = () => {
                                     <Link to="/my-account" >Minha Conta</Link>
                                 </li>
                                 <li>
-                                    <Link to="/logout" >Sair</Link>
+                                    <button onClick={handleLogout}>Sair</button>
                                 </li>
                                 <li>
                                     <Link to="" className='button'>Nova Postagem</Link>
@@ -38,7 +43,7 @@ const Header = () => {
                                     <Link to="/signin">Login</Link>
                                 </li>
                                 <li>
-                                    <Link to="/singup">Cadastrar</Link>
+                                    <Link to="/signup">Cadastrar</Link>
                                 </li>
                             </>
                         }

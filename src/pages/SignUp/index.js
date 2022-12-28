@@ -8,9 +8,11 @@ import { doLogin } from "../../helpers/authHandler";
 const Page = () => {
     const api = useApi();
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [estado, setEstado] = useState('');
     const [password, setPassword] = useState('');
-    const [rememberPassword, setRememberPassword] = useState(false);
+    const [confirmPassword, setconfirmPassword] = useState('');
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState('');
 
@@ -23,7 +25,7 @@ const Page = () => {
         if (json.error) {
             setError(json.error);
         } else {
-            doLogin(json.token, rememberPassword);
+            doLogin(json.token, false);
             window.location.href = "/";
         }
         setDisabled(false);
@@ -33,7 +35,7 @@ const Page = () => {
     return (
         <PageContainer>
             <PageTitle>
-                Login
+                Cadastro
             </PageTitle>
             <PageArea>
                 {error &&
@@ -45,6 +47,24 @@ const Page = () => {
                 }
 
                 <form onSubmit={handleSubmit}>
+                    <label className="area">
+                        <div className="area-title"> Nome Completo </div>
+                        <div className="area-input">
+                            <input type="text"
+                                required
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                disabled={disabled} />
+                        </div>
+                    </label>
+                    <label className="area">
+                        <div className="area-title"> Estado </div>
+                        <div className="area-input">
+                            <select required value={estado} onChange={e=>setEstado(e.target.value)}>
+                                <option>Selecione um estado</option>
+                            </select>
+                        </div>
+                    </label>
                     <label className="area">
                         <div className="area-title"> E-mail </div>
                         <div className="area-input">
@@ -65,7 +85,7 @@ const Page = () => {
                                 disabled={disabled} />
                         </div>
                     </label>
-                    <label className="area">
+                    {/* <label className="area">
                         <div className="area-title"> Lembre-se de mim </div>
                         <div className="area-input">
                             <input type="checkbox"
@@ -73,7 +93,7 @@ const Page = () => {
                                 onChange={() => setRememberPassword(!rememberPassword)}
                                 disabled={disabled} />
                         </div>
-                    </label>
+                    </label> */}
                     <label className="area">
                         <div className="area-title"></div>
                         <div className="area-input">

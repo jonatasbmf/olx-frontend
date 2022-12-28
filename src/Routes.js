@@ -13,14 +13,14 @@ export default () => {
             <Route exact path="/">
                 <Home />
             </Route>
+            <Route exact path="/about">
+                <About />
+            </Route>
             <Route exact path="/signin">
                 <SignIn />
             </Route>
             <Route exact path="/signup">
                 <SignUp />
-            </Route>
-            <Route exact path="/about">
-                <About />
             </Route>
             <Route>
                 <NotFound />

@@ -41,11 +41,62 @@ export const SearchArea = styled.div`
                 color:#FFF;
                 padding: 0 20px;
                 height: 40px;
+                cursor: pointer;
+
+                &:hover{
+                    background-color: #0099FF;
+                }
+            }
+        }
+    }
+
+    .categoryList {
+        display:flex;
+        flex-wrap:wrap;
+        margin-top:20px;
+
+        .categoriaItem {
+            width: 25%;
+            display:flex;
+            align-items:center;
+            color:#000;
+            text-decoration:none;
+            height:50px;
+            margin-bottom:10px;
+
+            &:hover {
+                color:#999;
+            }
+
+            img {
+                width: 45px;
+                height : 45px;
+                margin-right: 10px;
+
             }
         }
     }
 `;
 
 export const PageArea = styled.div`
+    h2 {
+        font-size:20px;
+    }
 
+    .listAds {
+        display:flex;
+        flex-wrap:wrap;
+
+        .adItem{
+            width:25%;
+        }
+    }
+
+    .verTodos {
+        color:#000;
+        text-decoration:none;
+        font-weight: bold;
+        display: inline-block;
+        margin-top: 10px;
+    }
 `;

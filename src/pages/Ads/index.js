@@ -12,35 +12,60 @@ let timer;
 const Page = () => {
     const api = useApi();
     const history = useHistory();
+
     const useQueryString = () => {
         return new URLSearchParams(useLocation().search);
     }
 
     const query = useQueryString();
 
+
     const [q, setQ] = useState(query.get('q') != null ? query.get('q') : '');
     const [cat, setCat] = useState(query.get('cat') != null ? query.get('cat') : '');
     const [estado, setEstado] = useState(query.get('state') != null ? query.get('state') : '');
 
-    const [resultOpacity, setResultOpacity] = useState(1);
 
     const [listaEstados, setListaEstados] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [anuncios, setAnuncios] = useState([]);
 
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [totalItens, setTotalItens] = useState(0);
+
+    const [loading, setLoading] = useState(false);
+    const [resultOpacity, setResultOpacity] = useState(1);
+
     const getAdsList = async () => {
+        setLoading(true);
+        let offset = 0;
+        offset = (paginaAtual - 1) * 9;
+
         const json = await api.getRecentesAnuncios({
             sort: 'asc',
             limit: 9,
             q,
             cat,
-            estado
+            estado,
+            offset
         })
         setAnuncios(json.ads);
+        setTotalItens(json.total);
         setResultOpacity(1);
+        setLoading(false);
     }
 
     useEffect(() => {
+        setResultOpacity(0.3);
+        getAdsList();
+    }, [paginaAtual]);
+
+    useEffect(() => {
+        if (anuncios.length > 0)
+            setTotalPaginas(Math.ceil(totalItens / anuncios.length));
+        else
+            setTotalPaginas(0);
+
         const getEstados = async () => {
             const eList = await api.getStates();
             setListaEstados(eList);
@@ -71,12 +96,18 @@ const Page = () => {
             search: `?${queryString.join('&')}`
         });
 
-        if (timer){
+        if (timer) {
             clearTimeout(timer);
         }
         timer = setTimeout(getAdsList, 2000);
         setResultOpacity(0.3);
-    }, [q, cat, estado]);
+        setPaginaAtual(1);
+    }, [q, cat, estado, totalItens]);
+
+    let pagination = [];
+    for (let i = 1; i <= totalPaginas; i++) {
+        pagination.push(i);
+    }
 
     return (
         <PageContainer>
@@ -116,11 +147,29 @@ const Page = () => {
                 </div>
                 <div className='rightSide'>
                     <h2>Resultados</h2>
-                    <div className='list' style={{opacity:resultOpacity}}>
+
+                    {loading && anuncios.length === 0 &&
+                        <div className='listWarning'>Carregando...</div>
+                    }
+
+                    {!loading && anuncios.length === 0 &&
+                        <div className='listWarning'>Não encontramos resultados com filtros informados.</div>
+                    }
+
+                    <div className='list' style={{ opacity: resultOpacity }}>
                         {anuncios.map((i, k) =>
                             <AnuncioItem key={k} data={i} />
                         )}
                     </div>
+
+                    <div className='pagination'>
+                        {pagination.map((i, k) =>
+                            <div key={k}
+                                onClick={() => setPaginaAtual(i)}
+                                className={i === paginaAtual ? 'pagItem active' : 'pagItem'}>{i}</div>
+                        )}
+                    </div>
+
                 </div>
             </PageArea>
         </PageContainer>

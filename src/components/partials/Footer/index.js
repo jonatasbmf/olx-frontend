@@ -7,6 +7,7 @@ const Footer = () => {
     return (
         <FooterArea>
             <PageContainer>
+                <p>Todos os direitos reservados</p>
             </PageContainer>
         </FooterArea>
     );

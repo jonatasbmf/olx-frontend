@@ -64,12 +64,45 @@ export const PageArea = styled.div`
             font-size:18px;            
         }
 
+        .listWarning{
+            padding:30px;
+            text-align: center;
+        }
+
         .list {
             display:flex;
             flex-wrap:wrap;
 
             .adItem{
                 width:33%;
+            }
+        }
+
+        .pagination {
+            display: flex;
+            align-items:center;
+            justify-content:center;
+
+            .pagItem {
+                width: 30px;
+                heigth: 30px;
+                border: 1px solid #000;
+                border-radius:3px; 
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:14px;
+                margin-right: 5px;
+                cursor:pointer;
+
+                &:hover{
+                    border-color: #CCC;
+                }
+            }
+
+            .active{
+                background-color:#00F;
+                color:#FFF
             }
         }
     }

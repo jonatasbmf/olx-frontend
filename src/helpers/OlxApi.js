@@ -83,6 +83,14 @@ const OlxAPI = {
             options
         );
         return json;
+    },
+
+    gatAnuncio: async(id, outros = false)=> {
+        const json = await apiFetchGet(
+            '/ad/item',
+            {id, outros}
+        );
+        return json;
     }
 
 };

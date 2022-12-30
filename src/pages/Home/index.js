@@ -60,7 +60,7 @@ const Page = () => {
                     </div>
                     <div className='categoryList'>
                         {categorias.map((i, k) =>
-                            <Link key={k} to={`/ads/?cat=${i.slug}`} className='categoriaItem'>
+                            <Link key={k} to={`/ads?cat=${i.slug}`} className='categoriaItem'>
                                 <img src={i.img} alt='' />
                                 <span>{i.name}</span>
                             </Link>

@@ -1,19 +1,44 @@
 import React, { useState, useEffect } from 'react';
-
-import { PageArea, SearchArea } from './styled';
+import { useLocation, useHistory } from 'react-router-dom';
+import { PageArea } from './styled';
 import { PageContainer } from '../../components/MainComponents';
 import AnuncioItem from '../../components/partials/AnuncioItem';
 
 import useApi from '../../helpers/OlxAPI';
 import { Link } from 'react-router-dom';
 
+let timer;
 
 const Page = () => {
     const api = useApi();
+    const history = useHistory();
+    const useQueryString = () => {
+        return new URLSearchParams(useLocation().search);
+    }
+
+    const query = useQueryString();
+
+    const [q, setQ] = useState(query.get('q') != null ? query.get('q') : '');
+    const [cat, setCat] = useState(query.get('cat') != null ? query.get('cat') : '');
+    const [estado, setEstado] = useState(query.get('state') != null ? query.get('state') : '');
+
+    const [resultOpacity, setResultOpacity] = useState(1);
+
     const [listaEstados, setListaEstados] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [anuncios, setAnuncios] = useState([]);
 
+    const getAdsList = async () => {
+        const json = await api.getRecentesAnuncios({
+            sort: 'asc',
+            limit: 9,
+            q,
+            cat,
+            estado
+        })
+        setAnuncios(json.ads);
+        setResultOpacity(1);
+    }
 
     useEffect(() => {
         const getEstados = async () => {
@@ -21,70 +46,84 @@ const Page = () => {
             setListaEstados(eList);
         }
         getEstados();
-    }, []);
 
-    useEffect(() => {
         const getCategorias = async () => {
             const lCategoria = await api.getCategorias();
             setCategorias(lCategoria);
         }
         getCategorias();
-    }, []);
 
-    useEffect(() => {
-        const getRecentesAnuncios = async () => {
-            const json = await api.getRecentesAnuncios({
-                sort: 'desc',
-                limit: 8
-            });
-            setAnuncios(json.ads);
+        let queryString = [];
+
+        if (q) {
+            queryString.push(`q=${q}`);
         }
-        getRecentesAnuncios();
-    }, []);
+
+        if (cat) {
+            queryString.push(`cat=${cat}`);
+        }
+
+        if (estado) {
+            queryString.push(`state=${estado}`);
+        }
+
+        history.replace({
+            search: `?${queryString.join('&')}`
+        });
+
+        if (timer){
+            clearTimeout(timer);
+        }
+        timer = setTimeout(getAdsList, 2000);
+        setResultOpacity(0.3);
+    }, [q, cat, estado]);
 
     return (
-        <>
-            <SearchArea>
-                <PageContainer>
-                    <div className='searchBox'>
-                        <form method='GET' action='/ads'>
-                            <input type="text" name='q' placeholder="Manda a busca..." />
-                            <select name='state'>
-                                <option>Selecione um estado</option>
-                                {listaEstados.map((i, k) =>
-                                    <option key={k} value={i.name}> {i.name}</option>
+        <PageContainer>
+            <PageArea>
+                <div className='leftSide'>
+                    <form method='GET'>
+                        <input
+                            type="text"
+                            name="q"
+                            placeholder='Manda a busca...'
+                            value={q}
+                            onChange={e => setQ(e.target.value)}
+                        />
+
+                        <div className='filterName'>Estado:</div>
+                        <select name='state' value={estado} onChange={e => setEstado(e.target.value)}>
+                            <option></option>
+                            {listaEstados &&
+                                listaEstados.map((i, k) =>
+                                    <option
+                                        value={i.name}
+                                        key={k}>{i.name}</option>
                                 )}
-                            </select>
-                            <button>Buscar</button>
-                        </form>
-                    </div>
-                    <div className='categoryList'>
-                        {categorias.map((i, k) =>
-                            <Link key={k} to={`/ads/?cat=${i.slug}`} className='categoriaItem'>
-                                <img src={i.img} alt='' />
-                                <span>{i.name}</span>
-                            </Link>
-                        )}
-                    </div>
-                </PageContainer>
-            </SearchArea>
-            <PageContainer>
-                <PageArea>
-                    <h2>Anúncios recentes</h2>
-                    <div className='listAds'>
+                        </select>
+                        <div className='filterName'>Categoria:</div>
+                        <ul>
+                            {categorias.map((i, k) =>
+                                <li key={k}
+                                    onClick={() => setCat(i.slug)}
+                                    className={cat == i.slug ? 'categoriaItem active' : 'categoriaItem'}>
+                                    <img src={i.img} alt="" />
+                                    <span>{i.name}</span>
+                                </li>
+                            )}
+                        </ul>
+                    </form>
+                </div>
+                <div className='rightSide'>
+                    <h2>Resultados</h2>
+                    <div className='list' style={{opacity:resultOpacity}}>
                         {anuncios.map((i, k) =>
                             <AnuncioItem key={k} data={i} />
                         )}
                     </div>
-
-                    <Link to='/ads' className='verTodos'>Ver todos &gt;&gt;&gt;&gt;</Link>
-                    <hr />
-                    <div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea comodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                </PageArea>
-            </PageContainer>
-        </>
+                </div>
+            </PageArea>
+        </PageContainer>
     );
 }
 

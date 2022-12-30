@@ -1,102 +1,76 @@
 import styled from 'styled-components';
 
-export const SearchArea = styled.div`
-    background-color:#DDD;
-    border-bottom: 1px solid #CCC;
-    padding: 30px 0 ;
+export const PageArea = styled.div`
+    display: flex;
+    margin-top:20px;
 
-    .searchBox{
-        background-color: #9BBB3C;
-        padding:20px 15px;
-        border-radius:10px;
-        box-shadow: 1px 1px 1px 0.4px rgba(0,0,0,0.2);
-        display: flex;
+    .leftSide{
+        width:250px;
+        margin-right:10px;
 
-        form{
-            flex: 1;
-            display: flex;
+        .filterName{
+            font-size:15px;
+            margin: 10px 0px;
 
-            input, select {
-                height: 40px;
-                border: 0;
-                border-radius:5px;
-                outline:0;  
-                font-size:15px;
-                color:#000;
-                margin-right: 20px;
-            }
-            input{
-                flex: 1;
-                padding: 0 10px;
-            }
-            select{
-                padding: 10px;
-            }
-
-            button {
-                background-color: #49AEEF;
-                font-size:15px;
-                border:0;
-                border-radius:5px;
-                color:#FFF;
-                padding: 0 20px;
-                height: 40px;
-                cursor: pointer;
-
-                &:hover{
-                    background-color: #0099FF;
-                }
-            }
         }
-    }
 
-    .categoryList {
-        display:flex;
-        flex-wrap:wrap;
-        margin-top:20px;
+        input, select {
+            width:100%;
+            height:40px;
+            border: 2px solid #9BB83C;
+            border-radius:0,
+            font-size:15px;
+            color:#000;
+            padding: 10px;
+        }
 
-        .categoriaItem {
-            width: 25%;
+        ul, li {
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+
+        .categoriaItem{
             display:flex;
             align-items:center;
+            padding:10px;
+            border-radius:5px;
             color:#000;
-            text-decoration:none;
-            height:50px;
-            margin-bottom:10px;
+            cursor:pointer;
 
-            &:hover {
-                color:#999;
+            img{
+                width:25px;
+                heigth:25px;
+                margin-right:5px;
             }
 
-            img {
-                width: 45px;
-                height : 45px;
-                margin-right: 10px;
-
+            span {
+                font-size:14px;
             }
         }
-    }
-`;
 
-export const PageArea = styled.div`
-    h2 {
-        font-size:20px;
-    }
-
-    .listAds {
-        display:flex;
-        flex-wrap:wrap;
-
-        .adItem{
-            width:25%;
+        .categoriaItem:hover,
+        .categoriaItem.active {
+            background-color:#9BB83C;
+            color:#FFF:
         }
     }
 
-    .verTodos {
-        color:#000;
-        text-decoration:none;
-        font-weight: bold;
-        display: inline-block;
-        margin-top: 10px;
+    .rightSide{
+        flex:1;
+
+        h2{
+            margin:0;
+            font-size:18px;            
+        }
+
+        .list {
+            display:flex;
+            flex-wrap:wrap;
+
+            .adItem{
+                width:33%;
+            }
+        }
     }
 `;

@@ -62,4 +62,31 @@ form {
     }
 }
 
+@media (max-width: 600px){
+    form {
+        .area {
+            flex-direction: column;
+
+            .area--title {
+                width: 100%;
+                text-align: left;
+                margin-bottom:10px;
+            }
+
+            select {
+                width: 100%;
+            }
+            
+            .area--input {
+                width: 100%;
+
+                button{
+                    width: 100%
+                    padding: 15px;
+                }
+            }
+        }
+    }
+}
+
 `;

@@ -98,6 +98,44 @@ export const PageArea = styled.div`
             margin-top:10px;
         }
     }
+
+    @media (max-width:600px){
+        &{
+            flex-direction:column;
+        }
+
+        .leftSide {
+            margin:0px;
+
+            .box {
+                width: 320px;
+                flex-direction: column;
+                margin:auto;
+            }
+
+            .adInfo{
+                padding:10px;
+            }
+
+        }   
+
+        .rightSide {
+            margin:0px;
+            width: auto;
+            margin-top: 20px;
+
+            .box {
+                width: 320px;
+                flex-direction: column;
+                margin:auto;
+            }
+
+            .contatoVendedor{
+                width: 320px;
+                margin: 20px auto;
+            } 
+        }
+    }
 `;
 
 export const OthersArea = styled.div`
@@ -107,9 +145,17 @@ export const OthersArea = styled.div`
 
     .list {
         display:flex;
+        flax-wrap:wrap;
 
         .adItem {
             width: 25%;
+        }
+    }
+
+    @media (max-width:600px){
+        margin:10px;
+        .list .adItem{
+            width:50%;
         }
     }
 `;
@@ -123,5 +169,9 @@ export const BreadChumb = styled.div`
         margin: 0px 5px;
         text-decoration:underline;
         color: #000;
+    }
+
+    @media (max-width:600px){
+        margin: 10px;
     }
 `;
